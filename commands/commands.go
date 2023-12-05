@@ -48,6 +48,9 @@ var ac = map[string]string{
 	"ts":   "TypeScript",
 	"py":   "Python",
 	"lol":  "Laugh Out Loud",
+	"lmao": "Laughing My Ass Off",
+	"btw":  "By The Way",
+	"tbh":  "To Be Honest"
 }
 
 var color = 0x9C182C
