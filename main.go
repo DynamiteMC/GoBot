@@ -62,7 +62,6 @@ func main() {
 				commands.Command_kick,
 				commands.Command_ban,
 				commands.Command_corner,
-				commands.Command_screenshot,
 				commands.Command_clean,
 				commands.Command_uncorner,
 				commands.Command_mcdoc,
