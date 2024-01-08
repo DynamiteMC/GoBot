@@ -73,6 +73,9 @@ func main() {
 				commands.Command_mcping,
 				commands.Command_fetchdb,
 				commands.Command_fancify,
+				commands.Command_warn,
+				commands.Command_unwarn,
+				commands.Command_warnings,
 			)
 			fmt.Println("Bot is online.")
 		}),

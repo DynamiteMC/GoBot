@@ -100,3 +100,34 @@ func IsMuted(id int64) bool {
 	d, _ := get("data/muted.json", fmt.Sprint(id))
 	return d
 }
+
+func Warnings(id int64) int {
+	_, d := get("data/warnings.json", fmt.Sprint(id))
+	if d == nil {
+		return 0
+	}
+	w, _ := d["warnings"].(float64)
+	return int(w)
+}
+
+func Warn(id int64) {
+	addEntryTo("data/warnings.json", fmt.Sprint(id), map[string]interface{}{
+		"warnings": float64(Warnings(id) + 1),
+	})
+}
+
+func Unwarn(id int64) {
+	w := Warnings(id)
+	if w == 0 {
+		return
+	}
+	addEntryTo("data/warnings.json", fmt.Sprint(id), map[string]interface{}{
+		"warnings": float64(w - 1),
+	})
+}
+
+func SetWarnings(id int64, w uint) {
+	addEntryTo("data/warnings.json", fmt.Sprint(id), map[string]interface{}{
+		"warnings": float64(w),
+	})
+}

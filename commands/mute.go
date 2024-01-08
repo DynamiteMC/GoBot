@@ -20,8 +20,6 @@ var Command_mute = Command{
 		if memberId == "" {
 			if message.Message.ReferencedMessage != nil {
 				memberId = message.Message.ReferencedMessage.Author.ID.String()
-			} else {
-				memberId = message.Message.Author.ID.String()
 			}
 		}
 		id := ParseMention(memberId)

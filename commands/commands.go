@@ -50,7 +50,7 @@ var ac = map[string]string{
 	"lol":  "Laugh Out Loud",
 	"lmao": "Laughing My Ass Off",
 	"btw":  "By The Way",
-	"tbh":  "To Be Honest"
+	"tbh":  "To Be Honest",
 }
 
 var color = 0x9C182C
@@ -165,6 +165,16 @@ func HasRole(client bot.Client, guildId snowflake.ID, memberId snowflake.ID, id 
 	return false
 }
 
+func indexAny(s string, sub ...string) (subindex int, index int) {
+	for in, substr := range sub {
+		i := strings.Index(s, substr)
+		if i != -1 {
+			return in, i
+		}
+	}
+	return -1, -1
+}
+
 func ParseMention(mention string) snowflake.ID {
 	if strings.HasPrefix(mention, "<@") && strings.HasSuffix(mention, ">") && !strings.HasPrefix(mention, "<@&") {
 		mention = strings.TrimPrefix(strings.TrimSuffix(mention, ">"), "<@")
@@ -196,6 +206,23 @@ func Handle(aic *chatgpt.Client, message *events.MessageCreate) {
 					message.Client().Rest().DeleteMessage(message.ChannelID, message.MessageID)
 					message.Client().Rest().DeleteMessage(message.ChannelID, ref.ID)
 				}
+			}
+		}
+	}
+
+	l := strings.ToLower(message.Message.Content)
+	m := []string{
+		"im",
+		"i'm",
+		"i’m",
+		"i am",
+	}
+	if s, i := indexAny(l, m...); i != -1 {
+		i += len(m[s])
+		if len(l) >= i && l[i] == ' ' {
+			c := strings.TrimSpace(message.Message.Content[i:])
+			if len(c) > 0 {
+				CreateMessage(message, fmt.Sprintf("Hi %s, I'm DynamiteMC", c), true)
 			}
 		}
 	}
