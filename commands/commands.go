@@ -54,7 +54,7 @@ var ac = map[string]string{
 	"plist": "Property-List",
 	"nbt":   "Named Binary Tag",
 	"angel": "Angel",
-	"idk":   "I Don't Know",,
+	"idk":   "I Don't Know",
 }
 
 var color = 0x9C182C
@@ -188,16 +188,6 @@ func ParseMention(mention string) snowflake.ID {
 		return 0
 	}
 	return snowflake.ID(id)
-}
-
-func indexAny(s string, sub ...string) (subindex int, index int) {
-	for in, substr := range sub {
-		i := strings.Index(s, substr)
-		if i != -1 {
-			return in, i
-		}
-	}
-	return -1, -1
 }
 
 var openaiClient *chatgpt.Client
