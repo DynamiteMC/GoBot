@@ -54,7 +54,7 @@ var ac = map[string]string{
 	"plist": "Property-List",
 	"nbt":   "Named Binary Tag",
 	"angel": "Angel",
-	"idk":   "I Don't Know",
+	"idk":   "I Don't Know",,
 }
 
 var color = 0x9C182C
@@ -167,6 +167,16 @@ func HasRole(client bot.Client, guildId snowflake.ID, memberId snowflake.ID, id 
 		}
 	}
 	return false
+}
+
+func indexAny(s string, sub ...string) (subindex int, index int) {
+	for in, substr := range sub {
+		i := strings.Index(s, substr)
+		if i != -1 {
+			return in, i
+		}
+	}
+	return -1, -1
 }
 
 func ParseMention(mention string) snowflake.ID {

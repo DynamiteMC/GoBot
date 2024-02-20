@@ -2,16 +2,17 @@ package commands
 
 import (
 	"fmt"
+	"gobot/store"
 
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 )
 
-var Command_kick = Command{
-	Name:        "kick",
-	Description: "Kick a member",
-	Permissions: discord.PermissionKickMembers,
-	Aliases:     []string{"yeet", "kicc"},
+var Command_unwarn = Command{
+	Name:        "unwarn",
+	Description: "Remove one warning from a member",
+	Permissions: discord.PermissionModerateMembers,
+	Aliases:     []string{"unwarn", "cool", "unwarm", "cold"},
 	Execute: func(message *events.MessageCreate, args []string) {
 		memberId := GetArgument(args, 0)
 		if memberId == "" {
@@ -24,17 +25,16 @@ var Command_kick = Command{
 			CreateMessage(message, Message{Content: "Failed to parse member", Reply: true})
 			return
 		}
+		store.Unwarn(int64(id))
+		warnings := store.Warnings(int64(id))
+
+		var tag string
 		member, err := message.Client().Rest().GetMember(*message.GuildID, id)
 		if err != nil {
-			CreateMessage(message, Message{Content: "Member is not in the server.", Reply: true})
-			return
+			tag = "Unknown#0000"
+		} else {
+			tag = member.User.Tag()
 		}
-		tag := member.User.Tag()
-		err = message.Client().Rest().RemoveMember(*message.GuildID, id)
-		if err != nil {
-			CreateMessage(message, Message{Content: "Failed to kick member", Reply: true})
-			return
-		}
-		CreateMessage(message, Message{Content: fmt.Sprintf("Yeeted member %s.", tag), Reply: true})
+		CreateMessage(message, Message{Content: fmt.Sprintf("Removed one warning from member %s (%d/3)", tag, warnings), Reply: true})
 	},
 }
