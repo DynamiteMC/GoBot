@@ -20,37 +20,41 @@ import (
 )
 
 var ac = map[string]string{
-	"bios": "Basic Input/Output System",
-	"mcpe": "Minecraft Pocket Edition",
-	"ram":  "Random Access Memory",
-	"rom":  "Read Only Memory",
-	"ssd":  "Solid State Drive",
-	"hdd":  "Hard Disk Drive",
-	"nyc":  "New York City",
-	"aws":  "Amazon Web Services",
-	"ai":   "Artificial Intelligence",
-	"wifi": "Wireless Fidelity",
-	"pc":   "Personal Computer",
-	"gn":   "Good Night",
-	"gm":   "Good Morning",
-	"dp":   "Display Port",
-	"hdmi": "High Definition Multimedia Interface",
-	"pdf":  "Personal Document Format",
-	"sata": "Serial Advanced Technology Attachment",
-	"pci":  "Peripheral Component Interconnect",
-	"pcie": "Peripheral Component Interconnect Express",
-	"nvme": "Non-Volatile Memory Express",
-	"tcp":  "Transmission Control Protocol",
-	"udp":  "User Datagram Protocol",
-	"www":  "World Wide Web",
-	"http": "Hypertext Transfer Protocol",
-	"js":   "JavaScript",
-	"ts":   "TypeScript",
-	"py":   "Python",
-	"lol":  "Laugh Out Loud",
-	"lmao": "Laughing My Ass Off",
-	"btw":  "By The Way",
-	"tbh":  "To Be Honest"
+	"bios":  "Basic Input/Output System",
+	"mcpe":  "Minecraft Pocket Edition",
+	"ram":   "Random Access Memory",
+	"rom":   "Read Only Memory",
+	"ssd":   "Solid State Drive",
+	"hdd":   "Hard Disk Drive",
+	"nyc":   "New York City",
+	"aws":   "Amazon Web Services",
+	"ai":    "Artificial Intelligence",
+	"wifi":  "Wireless Fidelity",
+	"pc":    "Personal Computer",
+	"gn":    "Good Night",
+	"gm":    "Good Morning",
+	"dp":    "Display Port",
+	"hdmi":  "High Definition Multimedia Interface",
+	"pdf":   "Personal Document Format",
+	"sata":  "Serial Advanced Technology Attachment",
+	"pci":   "Peripheral Component Interconnect",
+	"pcie":  "Peripheral Component Interconnect Express",
+	"nvme":  "Non-Volatile Memory Express",
+	"tcp":   "Transmission Control Protocol",
+	"udp":   "User Datagram Protocol",
+	"www":   "World Wide Web",
+	"http":  "Hypertext Transfer Protocol",
+	"js":    "JavaScript",
+	"ts":    "TypeScript",
+	"py":    "Python",
+	"lol":   "Laugh Out Loud",
+	"ext":   "ExtremeXT",
+	"rgx":   "RoyalGraphX",
+	"nvram": "Non Volatile Random Access Memory",
+	"plist": "Property-List",
+	"nbt":   "Named Binary Tag",
+	"angel": "Angel",
+	"idk":   "I Don't Know",
 }
 
 var color = 0x9C182C
@@ -176,6 +180,16 @@ func ParseMention(mention string) snowflake.ID {
 	return snowflake.ID(id)
 }
 
+func indexAny(s string, sub ...string) (subindex int, index int) {
+	for in, substr := range sub {
+		i := strings.Index(s, substr)
+		if i != -1 {
+			return in, i
+		}
+	}
+	return -1, -1
+}
+
 var openaiClient *chatgpt.Client
 
 func Handle(aic *chatgpt.Client, message *events.MessageCreate) {
@@ -185,6 +199,10 @@ func Handle(aic *chatgpt.Client, message *events.MessageCreate) {
 	}
 	if strings.Contains(strings.ToLower(message.Message.Content), "mmm") {
 		message.Client().Rest().AddReaction(message.ChannelID, message.MessageID, "✅")
+
+		if message.Message.Author.ID == 339415415497424897 {
+			CreateMessage(message, "Rgx checkpoint", true)
+		}
 	}
 
 	if message.Message.Content == "no!" {
@@ -196,6 +214,23 @@ func Handle(aic *chatgpt.Client, message *events.MessageCreate) {
 					message.Client().Rest().DeleteMessage(message.ChannelID, message.MessageID)
 					message.Client().Rest().DeleteMessage(message.ChannelID, ref.ID)
 				}
+			}
+		}
+	}
+
+	l := strings.ToLower(message.Message.Content)
+	m := []string{
+		"im",
+		"i'm",
+		"i’m",
+		"i am",
+	}
+	if s, i := indexAny(l, m...); i != -1 {
+		i += len(m[s])
+		if len(l) >= i && l[i] == ' ' {
+			c := strings.TrimSpace(message.Message.Content[i:])
+			if len(c) > 0 {
+				CreateMessage(message, fmt.Sprintf("Hi %s, I'm DynamiteMC", c), true)
 			}
 		}
 	}

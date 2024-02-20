@@ -62,7 +62,6 @@ func main() {
 				commands.Command_kick,
 				commands.Command_ban,
 				commands.Command_corner,
-				commands.Command_screenshot,
 				commands.Command_clean,
 				commands.Command_uncorner,
 				commands.Command_mcdoc,
@@ -73,6 +72,7 @@ func main() {
 				commands.Command_mcping,
 				commands.Command_fetchdb,
 				commands.Command_fancify,
+				commands.Command_graph,
 			)
 			fmt.Println("Bot is online.")
 		}),
